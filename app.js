@@ -1,19 +1,14 @@
 const formBtn = document.getElementById('form-submit')
-const inputs = document.querySelectorAll('input')
 
-const email = document.getElementById('email')
-email.addEventListener('focusout', () => {
+function validEmail(email) {
     if(email.validity.typeMismatch) {
         email.setCustomValidity('You must type a valid email adress.')
     } else {
         email.setCustomValidity('')
     }
-})
+}
 
-
-const country = document.getElementById('country')
-country.addEventListener('input', validCountry)
-function validCountry() {
+function validCountry(country) {
     const countryRegEx = /[^a-zA-Z]+/
     if(countryRegEx.test(country.value)) {
         country.setCustomValidity('Please enter a valid country name which does not include symbols.')
@@ -22,11 +17,7 @@ function validCountry() {
     }
 }
 
-const password = document.getElementById('pwd')
-password.addEventListener('input', validPwd)
-
-
-function validPwd() {
+function validPwd(password) {
     const passRegEx = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/
     if (!(passRegEx.test(password.value))) {
         password.setCustomValidity('The password must containt at least one symbol')
@@ -39,14 +30,9 @@ function validPwd() {
     } else if (password.value.length > 16) {
         password.setCustomValidity('Password must be at most 16 characters long.')
     }
-    checkPwdConsistency()
 }
 
-const confirmPwd = document.getElementById('confirm-pwd')
-confirmPwd.addEventListener('input', checkPwdConsistency)
-
-
-function checkPwdConsistency() {
+function passwordConsistency(password, confirmPwd) {
     if(password.value !== confirmPwd.value) {
         confirmPwd.setCustomValidity('Passwords must match!')
     } else {
@@ -60,7 +46,18 @@ function valueMiss(inputEl) {
     }
 }
 
-formBtn.addEventListener('click', () => {
+formBtn.addEventListener('click', (e) => {
+    // e.preventDefault()
+    const inputs = document.querySelectorAll('input')
+    const email = document.getElementById('email')
+    const country = document.getElementById('country')
+    const password = document.getElementById('pwd')
+    const confirmPwd = document.getElementById('confirm-pwd')
+
+    validEmail(email)
+    validCountry(country)
+    validPwd(password)
+    passwordConsistency(password, confirmPwd)
     inputs.forEach(input => {
         valueMiss(input)})
 })
